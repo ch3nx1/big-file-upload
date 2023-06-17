@@ -20,7 +20,7 @@ app.use(uploader());
 app.post('/api/upload', async (request, response) => {
     const { name, size, type, hash, offset } = request.body;
     const { chunk } = request.files;
-    console.log(request, name, size, type, hash, offset, chunk);
+    // console.log(request, name, size, type, hash, offset);
     const ext = extname(name);
     const fileName = resolve(__dirname, `./public/${hash}${ext}`);
 
