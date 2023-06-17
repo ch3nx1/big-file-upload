@@ -18,26 +18,26 @@ app.use(uploader());
 // });
 
 app.post('/api/upload', async (request, response) => {
-    const { name, size, type, hash, offset, chunk } = request.body;
-    const { file } = request.files;
-    console.log(name, size, type, hash, offset, chunk);
+    const { name, size, type, hash, offset } = request.body;
+    const { chunk } = request.files;
+    console.log(request, name, size, type, hash, offset, chunk);
     const ext = extname(name);
-    const fileName = resolve(__dirname, `./public${hash}${ext}`);
+    const fileName = resolve(__dirname, `./public/${hash}${ext}`);
 
-    if (offset) {
+    if (offset > 0) {
         if (!existsSync(fileName)) {
             response.status(400).send({
                 message: '文件不存在'
             });
             return;
         }
-        await appendFile(fileName, file.data);
+        await appendFile(fileName, chunk.data);
         response.send({
             data: 'appended'
         });
         return;
     }
-    await writeFile(fileName, file.data);
+    await writeFile(fileName, chunk.data);
     response.send({
         data: 'created'
     });
